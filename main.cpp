@@ -27,8 +27,7 @@ int main(int, char**) {
                 arr[i] = input[i];
             if (arr.size() > 0)
                 m_sock->sendData(arr);
-                
-            arr2.clear();
+
             m_sock->recvData(arr2);
             if (!arr2.empty())
             {
