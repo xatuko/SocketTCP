@@ -19,7 +19,7 @@ private: // members
     bool                         m_is_open;
 
     int m_fd;
-private: // methods
+private: // methods 
     int initClient();
     int initServer();
     int readData(const int & sock, ByteArray & data);
@@ -35,7 +35,7 @@ public: // methods
     int init() override;
     void sendData(const ByteArray & data) override;
     void recvData(ByteArray & data) override;
-    void closeSock();
+    void closeSock() override;
 };
 
 #endif // CSOCKETTCP_HPP
