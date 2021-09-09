@@ -29,12 +29,14 @@ private: // methods
     void print(const std::string & text);
     int  error(const std::string & text);
 public: // methods
-    CSocketTCP(const std::string & ip, const int & port, const SocketType & sock_type);
+    CSocketTCP(const std::string & ip,
+               const int & port,
+               const SocketType & sock_type);
     ~CSocketTCP() override;
 
     int init() override;
     void sendData(const ByteArray & data) override;
-    void recvData(ByteArray & data) override;
+    bool recvData(ByteArray & data) override;
     void closeSock() override;
 };
 

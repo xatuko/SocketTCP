@@ -84,7 +84,7 @@ void CSocketTCP::sendData(const ByteArray & data)
     lock.unlock();
 }
 
-void CSocketTCP::recvData(ByteArray & data)
+bool CSocketTCP::recvData(ByteArray & data)
 {
     data.clear();
     std::unique_lock<std::mutex> lock(m_r_buf_control);
@@ -94,44 +94,43 @@ void CSocketTCP::recvData(ByteArray & data)
         m_recv_buffer.pop();
     }
     lock.unlock();
+
+    return !data.empty();
 }
 
 void CSocketTCP::bufproc(int sock)
 {
-    m_pfd = new pollfd[2];
+    m_pfd = new pollfd[1];
 
     m_pfd[0].fd      = sock;
     m_pfd[0].events  = POLLIN;
     m_pfd[0].revents = 0;
 
-    m_pfd[1].fd      = sock;
-    m_pfd[1].events  = POLLOUT;
-    m_pfd[1].revents = 0;
-
     while (m_run)
     {   
-        int res = poll(m_pfd, 2, 1000);
-        if (res > 0)
+        // Отправка сообщения.
+        if (m_send_buffer.size() > 0)
         {
-            if (m_send_buffer.size() > 0 && m_pfd[1].revents & POLLOUT)
-            {
-                std::unique_lock<std::mutex> lock(m_s_buf_control);
-                if (writeData(sock, m_send_buffer.front()) > 0)
-                    m_send_buffer.pop();
-                lock.unlock();
-            }
+            std::unique_lock<std::mutex> lock(m_s_buf_control);
+            if (writeData(sock, m_send_buffer.front()) > 0)
+                m_send_buffer.pop();
+            lock.unlock();
+        }
 
+        // Ожидание входящего сообщения.
+        int res = poll(m_pfd, 1, 1000);
+        if (res >= 0)
+        {
             if (m_pfd[0].revents & POLLIN)
             {
+                // Чтение сообщения.
                 std::unique_lock<std::mutex> lock(m_r_buf_control);
                 ByteArray barray(BUFFER_SIZE);
                 if (readData(sock, barray) > 0)
                     m_recv_buffer.push(barray);
                 lock.unlock();
             }
-
             m_pfd[0].revents = 0;
-            m_pfd[1].revents = 0;
         }
         
         if (res < 0)

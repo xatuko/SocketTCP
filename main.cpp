@@ -28,8 +28,7 @@ int main(int, char**) {
             if (arr.size() > 0)
                 m_sock->sendData(arr);
 
-            m_sock->recvData(arr2);
-            if (!arr2.empty())
+            if (m_sock->recvData(arr2))
             {
                 std::cout << "Message: ";
                 for (int i =  0; i < arr2.size(); i++)
