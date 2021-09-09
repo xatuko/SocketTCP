@@ -84,6 +84,7 @@ void CSocketTCP::sendData(const ByteArray & data)
 
 void CSocketTCP::recvData(ByteArray & data)
 {
+    data.clear();
     std::unique_lock<std::mutex> lock(m_r_buf_control);
     if (m_recv_buffer.size() > 0)
     {
