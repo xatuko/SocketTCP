@@ -1,6 +1,8 @@
 #include "csockettcp.hpp"
 
-CSocketTCP::CSocketTCP(const std::string & ip, const int & port, const SocketType & sock_type) : ISocketTCP()
+CSocketTCP::CSocketTCP(const std::string & ip,
+                       const int & port,
+                       const SocketType & sock_type) : ISocketTCP()
 {
     m_sock_addr.sin_family      = AF_INET;
     m_sock_addr.sin_port        = htons(port);
@@ -107,26 +109,7 @@ void CSocketTCP::bufproc(int sock)
     m_pfd[1].revents = 0;
 
     while (m_run)
-    {
-        // std::unique_lock<std::mutex> lock1(m_s_buf_control);
-        // if (m_send_buffer.size() > 0)
-        // {
-        //     ByteArray barray = m_send_buffer.front();
-        //     if (writeData(sock, barray) > 0)
-        //         m_send_buffer.pop();
-        // }
-        // lock1.unlock();
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-        // std::unique_lock<std::mutex> lock2(m_r_buf_control);
-        // ByteArray barray(BUFFER_SIZE);
-        // if (readData(sock, barray) > 0)
-        //     m_recv_buffer.push(barray);
-        // lock2.unlock();
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        
+    {   
         int res = poll(m_pfd, 2, 1000);
         if (res > 0)
         {

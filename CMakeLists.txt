@@ -5,9 +5,15 @@ find_package(Threads REQUIRED)
 
 add_executable(SocketTCP main.cpp)
 
-add_subdirectory(libsocktcp)
-
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
-target_link_libraries(SocketTCP SocketTCP_library Threads::Threads)
+if(WIN32)
+    add_compile_definitions(WINDOWS)
+    add_subdirectory(libsocktcp)
+    target_link_libraries(SocketTCP PRIVATE SocketTCP_library Threads::Threads wsock32 ws2_32)
+else()
+    add_compile_definitions(UNIX)
+    add_subdirectory(libsocktcp)
+    target_link_libraries(SocketTCP PRIVATE SocketTCP_library Threads::Threads)
+endif()
