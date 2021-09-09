@@ -3,9 +3,7 @@
 
 #ifdef WINDOWS
 #include <winsock2.h>
-#endif
-
-#ifdef UNIX
+#else
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <sys/poll.h>
