@@ -1,5 +1,7 @@
 #include "csockettcp.hpp"
 
+namespace libsock {
+
 CSocketTCP::CSocketTCP(const std::string & ip,
                        const int & port,
                        const SocketType & sock_type) : ISocketTCP()
@@ -170,3 +172,5 @@ CSocketTCP::~CSocketTCP()
 {
     closeSock();
 }
+
+} // namespace libsock

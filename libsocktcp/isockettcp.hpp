@@ -3,6 +3,8 @@
 
 #include "common.hpp"
 
+namespace libsock {
+
 class ISocketTCP
 {
 public:
@@ -23,7 +25,7 @@ public:
 
     /**
      * @brief Прочитать данные.
-     * @param data Массив данных, куда считывать данные.
+     * @param data Массив, куда считывать данные.
      * @return true - если есть данные, false - если нет данных.
      */
     virtual bool recvData(ByteArray & data) = 0;
@@ -33,5 +35,7 @@ public:
      */
     virtual void closeSock() = 0;
 };
+
+} // namespace libsock
 
 #endif // ISOCKETTCP_HPP

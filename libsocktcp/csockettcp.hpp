@@ -3,6 +3,8 @@
 
 #include "isockettcp.hpp"
 
+namespace libsock {
+
 class CSocketTCP : public ISocketTCP
 {
 private: // members
@@ -19,6 +21,7 @@ private: // members
     bool                         m_is_open;
 
     int m_fd;
+
 private: // methods 
     int initClient();
     int initServer();
@@ -39,5 +42,7 @@ public: // methods
     bool recvData(ByteArray & data) override;
     void closeSock() override;
 };
+
+} // namespace libsock
 
 #endif // CSOCKETTCP_HPP
